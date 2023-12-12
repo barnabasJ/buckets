@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
         },
         rollupOptions: {
           output: {
-            dir: './assets',
+            dir: './dist/client/assets',
           },
         },
         emptyOutDir: false,
@@ -22,6 +22,20 @@ export default defineConfig(({ mode }) => {
     }
   } else {
     return {
+      build: {
+        ssr: true,
+        lib: {
+          entry: './src/server.tsx',
+          formats: ['es'],
+          fileName: 'server',
+          name: 'server',
+        },
+        rollupOptions: {
+          output: {
+            dir: './dist',
+          },
+        },
+      },
       plugins: [
         devServer({
           entry: 'src/server.tsx',
