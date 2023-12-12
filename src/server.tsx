@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import {renderToString} from 'react-dom/server'
+import { App } from './app'
 
 console.log(import.meta.env)
 
@@ -16,12 +17,14 @@ app.get('/', (c) => {
           </>
         ) : (
           <>
-            <script type='module' src='/src/client.ts'></script>
+            <script type='module' src='/src/client.tsx'></script>
           </>
         )}
       </head>
       <body>
-        <h1>Hello World</h1>
+        <div id='root'>
+          <App />
+        </div>
       </body>
     </html>
   ))
