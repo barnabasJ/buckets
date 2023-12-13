@@ -3,23 +3,10 @@ import devServer from "@hono/vite-dev-server";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig(({ mode }): UserConfig => {
-  if (mode === "client") {
-    return {
-      plugins: [react(), vanillaExtractPlugin({ emitCssInSsr: true })],
-      build: {
-        rollupOptions: {
-          input: "./src/client.tsx",
-          output: {
-            entryFileNames: "[name].js",
-            dir: "./dist/client/assets",
-          },
-        },
-        emptyOutDir: false,
-        copyPublicDir: false,
-      },
-    };
-  } else {
+export default defineConfig((inputs): UserConfig => {
+  console.log({ inputs });
+  const mode = inputs.mode;
+  if (inputs.isSsrBuild) {
     return {
       build: {
         ssr: true,
@@ -41,11 +28,26 @@ export default defineConfig(({ mode }): UserConfig => {
       },
       plugins: [
         react(),
-        vanillaExtractPlugin(),
+        vanillaExtractPlugin({ emitCssInSsr: false }),
         devServer({
           entry: "src/server.tsx",
         }),
       ],
+    };
+  } else {
+    return {
+      plugins: [react(), vanillaExtractPlugin()],
+      build: {
+        rollupOptions: {
+          input: "./src/client.tsx",
+          output: {
+            entryFileNames: "[name].js",
+            dir: "./dist/client/assets",
+          },
+        },
+        emptyOutDir: false,
+        copyPublicDir: false,
+      },
     };
   }
 });
