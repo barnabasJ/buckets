@@ -1,13 +1,13 @@
-import { defineConfig } from "vite";
+import { UserConfig, defineConfig } from "vite";
 import devServer from "@hono/vite-dev-server";
+import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import react from "@vitejs/plugin-react";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }): UserConfig => {
   if (mode === "client") {
     return {
-      plugins: [react()],
+      plugins: [react(), vanillaExtractPlugin({ emitCssInSsr: true })],
       build: {
-        entry: "./src/client.tsx",
         rollupOptions: {
           input: "./src/client.tsx",
           output: {
@@ -35,8 +35,13 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+      ssr: {
+        target: "webworker",
+        // noExternal: true,
+      },
       plugins: [
         react(),
+        vanillaExtractPlugin(),
         devServer({
           entry: "src/server.tsx",
         }),
