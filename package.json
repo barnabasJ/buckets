@@ -1,8 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev dist/server.js",
-    "deploy": "wrangler deploy --minify dist/server.js"
+    "dev": "vite",
+    "cloudflare-dev": "wrangler dev dist/server.js",
+    "deploy": "wrangler deploy --minify dist/server.js",
+    "build": "vite build && vite build --mode client"
   },
   "dependencies": {
     "@hono/vite-dev-server": "^0.3.0",

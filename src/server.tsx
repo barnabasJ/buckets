@@ -6,7 +6,7 @@ console.log(import.meta.env)
 
 const app = new Hono()
 
-app.get('/', (c) => {
+app.get('/*', (c) => {
   return c.html(
     renderToString(
     <html>
