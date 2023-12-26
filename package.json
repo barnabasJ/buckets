@@ -2,7 +2,7 @@
   "name": "buckets",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production ts-node --esm ./server.ts",
+    "start": "NODE_OPTIONS=--inspect NODE_ENV=production ts-node --esm ./server.ts",
     "dev": "ts-node --esm ./server.ts",
     "cloudflare-dev": "wrangler dev dist/server.js",
     "deploy": "wrangler deploy --minify dist/server.js",

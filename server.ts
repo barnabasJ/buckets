@@ -1,4 +1,5 @@
 import fs from "fs";
+import { PassThrough, Readable } from "stream";
 import Fastify from "fastify";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -72,16 +73,17 @@ async function createServer() {
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
-      const appHtml = await render(url);
+      const stream = await render(res);
+      console.log({ stream });
 
       // 5. Inject the app-rendered HTML into the template.
-      const html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      const [top, bottom] = template.split(`<!--ssr-outlet-->`);
 
       // 6. Send the rendered HTML back.
       res.statusCode = 200;
 
       res.header("Content-Type", "text/html");
-      return html;
+      return res.send(merge(Readable.from(top), stream, Readable.from(bottom)));
     } catch (e) {
       // If an error is caught, let Vite fix the stack trace so it maps back
       // to your actual source code.
@@ -96,3 +98,12 @@ async function createServer() {
 }
 
 createServer();
+
+function merge(...streams: Readable[]) {
+  let pass = new PassThrough();
+  for (let stream of streams) {
+    const end = stream == streams.at(-1);
+    pass = stream.pipe(pass, { end });
+  }
+  return pass;
+}

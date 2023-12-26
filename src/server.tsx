@@ -1,7 +1,18 @@
-import {renderToString} from 'react-dom/server'
-import { App } from './app'
+import { PassThrough } from "stream";
+import { renderToPipeableStream } from "react-dom/server";
+import { App } from "./app";
 
 export function render() {
-  console.log('render')
-  return renderToString(<App />)
+  const stream = new PassThrough();
+  return new Promise((resolve, reject) => {
+    const { pipe } = renderToPipeableStream(<App />, {
+      onShellReady: () => {
+        pipe(stream);
+        resolve(stream);
+      },
+      onError: (err) => {
+        reject(err);
+      },
+    });
+  });
 }
