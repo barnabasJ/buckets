@@ -43,7 +43,7 @@ async function createServer() {
 
   const { render } = await (isProduction
     ? // @ts-expect-error
-      import("./dist/server/server/entry.js")
+      import("./dist/server/entry.js")
     : // @ts-expect-error
       vite.ssrLoadModule("./src/server/entry.tsx"));
 

@@ -2,15 +2,15 @@
   "name": "buckets",
   "type": "module",
   "scripts": {
-    "start": "NODE_OPTIONS=--inspect NODE_ENV=production ts-node --esm ./server.ts",
-    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run graphql:codegen\"",
+    "start": "NODE_ENV=production node --loader ts-node/esm ./server.ts",
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run graphql:codegen:watch\"",
     "dev:server": "node --watch-path=./src/server --watch-preserve-output --loader ts-node/esm ./server.ts",
-    "cloudflare-dev": "wrangler dev dist/server.js",
     "deploy": "wrangler deploy --minify dist/server.js",
-    "build": "npm run build:server && npm run build:client",
-    "build:client": "vite build --outDir dist/client --ssrManifest",
+    "build": "npm run graphql:codegen && npm run build:server && npm run build:client",
+    "build:client": "vite build --outDir dist/client",
     "build:server": "vite build --outDir dist/server --ssr ./src/server/entry.tsx",
-    "graphql:codegen": "graphql-codegen --watch --config codegen.ts"
+    "graphql:codegen": "graphql-codegen --config codegen.ts",
+    "graphql:codegen:watch": "npm run graphql:codegen -- --watch"
   },
   "overrides": {
     "@reduxjs/toolkit": "^2.0.1"
