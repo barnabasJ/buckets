@@ -5,6 +5,21 @@ defmodule BucketsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :graphql do
+    plug AshGraphql.Plug
+  end
+
+  scope "/" do
+    pipe_through [:graphql]
+
+    forward "/gql", Absinthe.Plug, schema: BucketsWeb.Schema
+
+    forward "/playground",
+            Absinthe.Plug.GraphiQL,
+            schema: BucketsWeb.Schema,
+            interface: :playground
+  end
+
   scope "/api", BucketsWeb do
     pipe_through :api
   end

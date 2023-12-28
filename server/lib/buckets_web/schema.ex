@@ -1,0 +1,10 @@
+defmodule BucketsWeb.Schema do
+  use Absinthe.Schema
+
+  @apis [Buckets.Tracking]
+
+  use AshGraphql, apis: @apis
+
+  query do
+  end
+end

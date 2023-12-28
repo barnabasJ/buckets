@@ -44,7 +44,12 @@ defmodule Buckets.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:absinthe, "~> 1.7"},
+      {:absinthe_plug, "~> 1.5"},
+      {:ash, github: "ash-project/ash", branch: "main", override: true},
+      {:ash_postgres, github: "ash-project/ash_postgres", branch: "main"},
+      {:ash_graphql, github: "ash-project/ash_graphql", branch: "main"}
     ]
   end
 

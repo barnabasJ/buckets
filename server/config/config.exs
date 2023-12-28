@@ -39,6 +39,13 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Ash
+config :buckets, ash_apis: [Buckets.Tracking]
+
+# AshGraphql
+# https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html#add-some-backwards-compatibility-configuration
+config :ash_graphql, :default_managed_relationship_type_name_template, :action_name
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
