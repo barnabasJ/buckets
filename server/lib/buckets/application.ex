@@ -20,6 +20,8 @@ defmodule Buckets.Application do
       BucketsWeb.Endpoint
     ]
 
+    Corsica.Telemetry.attach_default_handler(log_levels: [rejected: :error])
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Buckets.Supervisor]

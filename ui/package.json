@@ -8,23 +8,37 @@
     "deploy": "wrangler deploy --minify dist/server.js",
     "build": "npm run build:server && npm run build:client",
     "build:client": "vite build --outDir dist/client --ssrManifest",
-    "build:server": "vite build --outDir dist/server --ssr ./src/server.tsx"
+    "build:server": "vite build --outDir dist/server --ssr ./src/server.tsx",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@fastify/middie": "^8.3.0",
     "@fastify/static": "^6.12.0",
+    "@reduxjs/toolkit": "^2.0.1",
+    "@rtk-query/graphql-request-base-query": "^2.2.0",
     "@vanilla-extract/css": "^1.14.0",
     "fastify": "^4.25.2",
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-redux": "^9.0.4",
     "vite": "^5.0.8"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230914.0",
+    "@graphql-codegen/cli": "5.0.0",
+    "@graphql-codegen/client-preset": "4.1.0",
+    "@graphql-codegen/near-operation-file-preset": "^3.0.0",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@graphql-codegen/typescript-rtk-query": "^3.1.1",
+    "@parcel/watcher": "^2.3.0",
+    "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vanilla-extract/vite-plugin": "^3.9.3",
     "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
     "wrangler": "^3.15.0"
   }
 }

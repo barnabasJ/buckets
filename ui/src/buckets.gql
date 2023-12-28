@@ -1,0 +1,6 @@
+query Buckets {
+  buckets {
+    id
+    name
+  }
+}

@@ -44,6 +44,11 @@ defmodule BucketsWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
+
+  plug Corsica,
+    origins: "*",
+    allow_headers: ["content-type"]
+
   plug Plug.Session, @session_options
   plug BucketsWeb.Router
 end

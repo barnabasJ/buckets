@@ -1,7 +1,15 @@
-import {root} from './app.css'
+import React from "react";
+import { root } from "./app.css";
+import { useBucketsQuery } from "./buckets.generated";
 
 export function App() {
-    return <div className={root}>
-        <h1>Hello World</h1>
+  const m = useBucketsQuery();
+
+  console.log(m);
+
+  return (
+    <div className={root}>
+      <h1>Hello World</h1>
     </div>
+  );
 }
