@@ -3,7 +3,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   overwrite: true,
   schema: "http://localhost:4000/gql",
-  documents: "./src/**/*.gql",
+  documents: ["./src/**/*.gql"],
   generates: {
     "src/types/generated.ts": {
       plugins: ["typescript"],
@@ -14,7 +14,7 @@ const config: CodegenConfig = {
     "src/": {
       preset: "near-operation-file",
       presetConfig: {
-        baseTypesPath: "types/generated.ts",
+        baseTypesPath: "/types/generated.ts",
       },
       plugins: [
         "typescript-operations",
@@ -35,16 +35,10 @@ const config: CodegenConfig = {
           `,
           },
         },
-        // {
-        //   add: {
-        //     content: "module.hot?.accept();",
-        //   },
-        // },
         {
           "typescript-rtk-query": {
-            importBaseApiFrom: "./api",
+            importBaseApiFrom: "@src/store/api",
             exportHooks: true,
-            // overrideExisting: 'module.hot?.status() === "apply"',
           },
         },
       ],

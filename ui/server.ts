@@ -23,6 +23,7 @@ async function createServer() {
     // 'custom', disabling Vite's own HTML serving logic so parent server
     // can take control
     vite = await createViteServer({
+      configFile: path.resolve(__dirname, "./vite.config.ts"),
       server: { middlewareMode: true },
       appType: "custom",
     });
@@ -42,9 +43,9 @@ async function createServer() {
 
   const { render } = await (isProduction
     ? // @ts-expect-error
-      import("./dist/server/server.js")
+      import("./dist/server/server/entry.js")
     : // @ts-expect-error
-      vite.ssrLoadModule("./src/server.tsx"));
+      vite.ssrLoadModule("./src/server/entry.tsx"));
 
   let template = fs.readFileSync(
     path.resolve(

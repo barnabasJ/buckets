@@ -1,5 +1,4 @@
 {
-  "include": ["server.ts"],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
@@ -7,12 +6,15 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["./src/*"],
+    },
     "lib": [
       "esnext",
-      "dom"
+      "dom",
     ],
     "types": [
-      "@cloudflare/workers-types",
       "vite/client"
     ],
     "jsx": "react-jsx",

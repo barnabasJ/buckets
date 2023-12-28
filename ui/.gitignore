@@ -3,6 +3,9 @@ dist
 .wrangler
 .dev.vars
 
+# codegen
+**/*generated.ts
+
 # Change them to your taste:
 wrangler.toml
 package-lock.json

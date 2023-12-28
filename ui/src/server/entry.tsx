@@ -1,9 +1,8 @@
-import React from "react";
 import { PassThrough } from "stream";
 import { renderToPipeableStream } from "react-dom/server";
-import { App } from "./app";
+import { App } from "@src/client/app";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { store } from "@src/store/store";
 
 export function render() {
   const stream = new PassThrough();
