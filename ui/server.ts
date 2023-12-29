@@ -41,11 +41,12 @@ async function createServer() {
     });
   }
 
-  const { render } = await (isProduction
-    ? // @ts-expect-error
-      import("./dist/server/entry.js")
-    : // @ts-expect-error
-      vite.ssrLoadModule("./src/server/entry.tsx"));
+  let render: () => Promise<Readable>;
+  // in production load the build javascript once
+  if (isProduction) {
+    // @ts-expect-error
+    render = (await import("./dist/server/entry.js")).render;
+  }
 
   let template = fs.readFileSync(
     path.resolve(
@@ -57,6 +58,12 @@ async function createServer() {
 
   fastify.get("/", async (req, res) => {
     const url = req.originalUrl;
+
+    // in dev mode we load the render method for every request
+    // in order to always have the newest server code
+    if (!isProduction) {
+      render = (await vite.ssrLoadModule("./src/server/entry.tsx")).render;
+    }
 
     try {
       // 1. Read index.html
@@ -74,7 +81,7 @@ async function createServer() {
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
-      const stream = await render(res);
+      const stream = await render();
       console.log({ stream });
 
       // 5. Inject the app-rendered HTML into the template.
