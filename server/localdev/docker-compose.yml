@@ -2,6 +2,14 @@ version: "3.7"
 
 services:
 
+  # Install a separate instance for development
+  postgres-dev:
+    image: postgres:16
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
   # Install a separate instance for integration tests
   #
   # The instance is trimmed for performance
@@ -9,11 +17,11 @@ services:
   # - stores data in memory (rather than file system)
   #
   # inspired by: https://github.com/testjavascript/nodejs-integration-tests-best-practices#postgres
-  postgres:
+  postgres-test:
     image: postgres:16
     restart: unless-stopped
     ports:
-      - "5432:5432"
+      - "54321:5432"
     environment:
       POSTGRES_PASSWORD: postgres
     # Trim for performance:
