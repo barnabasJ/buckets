@@ -7,4 +7,7 @@ defmodule BucketsWeb.Schema do
 
   query do
   end
+
+  mutation do
+  end
 end

@@ -1,6 +1,6 @@
 import fs from "fs";
 import { PassThrough, Readable } from "stream";
-import Fastify from "fastify";
+import Fastify, { FastifyRequest } from "fastify";
 import path from "path";
 import { fileURLToPath } from "url";
 import { ViteDevServer, createServer as createViteServer } from "vite";
@@ -37,11 +37,12 @@ async function createServer() {
     fastify.use(vite.middlewares);
   } else {
     fastify.register(fastifyStatic, {
-      root: path.resolve(__dirname, "./dist/client"),
+      root: path.resolve(__dirname, "./dist/client/assets/"),
+      prefix: "/assets/",
     });
   }
 
-  let render: () => Promise<Readable>;
+  let render: (req: FastifyRequest) => Promise<Readable>;
   // in production load the build javascript once
   if (isProduction) {
     // @ts-expect-error
@@ -56,7 +57,7 @@ async function createServer() {
     "utf-8"
   );
 
-  fastify.get("/", async (req, res) => {
+  fastify.get("/*", async (req, res) => {
     const url = req.originalUrl;
 
     // in dev mode we load the render method for every request
@@ -81,7 +82,7 @@ async function createServer() {
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
       //    e.g. ReactDOMServer.renderToString()
-      const stream = await render();
+      const stream = await render(req);
       console.log({ stream });
 
       // 5. Inject the app-rendered HTML into the template.

@@ -1,0 +1,15 @@
+query Buckets {
+  buckets {
+    id
+    name
+  }
+}
+
+mutation NewBucket($name: String!) {
+  newBucket(input: {name: $name}) {
+    result {
+      id
+      name
+    }
+  }
+}

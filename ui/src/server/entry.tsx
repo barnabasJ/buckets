@@ -3,16 +3,20 @@ import { renderToPipeableStream } from "react-dom/server";
 import { App } from "@src/client/app";
 import { Provider } from "react-redux";
 import { store } from "@src/store/store";
-import { StrictMode, Suspense } from "react";
+import { StrictMode } from "react";
+import { Router } from "wouter";
+import { FastifyRequest } from "fastify";
 
-export function render() {
+export function render(req: FastifyRequest) {
   const stream = new PassThrough();
   return new Promise((resolve, reject) => {
     const { pipe } = renderToPipeableStream(
       <StrictMode>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        <Router ssrPath={req.url}>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </Router>
       </StrictMode>,
       {
         // use onAllReady for now as we do not load data inside the tree

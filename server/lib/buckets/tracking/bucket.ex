@@ -21,6 +21,10 @@ defmodule Buckets.Tracking.Bucket do
     queries do
       list :buckets, :read
     end
+
+    mutations do
+      create :new_bucket, :create
+    end
   end
 
   actions do
