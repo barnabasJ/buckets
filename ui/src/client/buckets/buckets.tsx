@@ -35,10 +35,10 @@ export default function Buckets() {
           <div>
             <label htmlFor="scheduleType">Name</label>
             <select
+              defaultValue=""
               required
               id="scheduleType"
               name="scheduleType"
-              defaultValue=""
               onChange={(e) => setScheduleType(e.target.value)}
             >
               <option value="">Please select a schedule type</option>
