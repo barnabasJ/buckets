@@ -2,11 +2,17 @@ query Buckets {
   buckets {
     id
     name
+    schedule {
+      ... on BucketDailySchedule {
+        minutes
+      }
+    }
+    currentDuration
   }
 }
 
-mutation NewBucket($name: String!) {
-  newBucket(input: {name: $name}) {
+mutation NewBucket($name: String! $schedule: BucketScheduleInput!) {
+  newBucket(input: {name: $name, schedule: $schedule}) {
     result {
       id
       name

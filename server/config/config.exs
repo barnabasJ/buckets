@@ -42,9 +42,18 @@ config :phoenix, :json_library, Jason
 # Ash
 config :buckets, ash_apis: [Buckets.Tracking]
 
+# Error Message
+# When the 1.0 version of ash_graphql is released, the default will be changed to `:datetime`, and this error message will
+# no longer be shown (but any configuration set will be retained indefinitely).
+#
+# can be removed after next major release of ash_graphql
+config :ash, :utc_datetime_type, :datetime
+
 # AshGraphql
 # https://hexdocs.pm/ash_graphql/getting-started-with-graphql.html#add-some-backwards-compatibility-configuration
 config :ash_graphql, :default_managed_relationship_type_name_template, :action_name
+# https://hexdocs.pm/ash_graphql/use-json-with-graphql.html
+config :ash_graphql, :json_type, :json
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

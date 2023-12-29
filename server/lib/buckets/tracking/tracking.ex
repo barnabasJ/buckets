@@ -3,5 +3,6 @@ defmodule Buckets.Tracking do
 
   resources do
     resource Buckets.Tracking.Bucket
+    resource Buckets.Tracking.Entry
   end
 end

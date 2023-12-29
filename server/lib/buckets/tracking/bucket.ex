@@ -13,6 +13,14 @@ defmodule Buckets.Tracking.Bucket do
     attribute :name, :string do
       allow_nil? false
     end
+
+    attribute :schedule, Buckets.Tracking.Schedule do
+      allow_nil? false
+    end
+  end
+
+  relationships do
+    has_many :entries, Buckets.Tracking.Entry
   end
 
   graphql do
@@ -25,6 +33,12 @@ defmodule Buckets.Tracking.Bucket do
     mutations do
       create :new_bucket, :create
     end
+  end
+
+  calculations do
+    calculate :current_duration,
+              :integer,
+              expr(sum(entries, field: :duration, query: [filter: expr(fragment("?::date = ?", from, today()))]))
   end
 
   actions do
