@@ -33,12 +33,21 @@ defmodule Buckets.Tracking.Bucket do
     mutations do
       create :new_bucket, :create
     end
+
+    subscriptions do
+      subscribe(:bucket_created, fn _, _ -> {:ok, topic: "*"} end)
+    end
   end
 
   calculations do
     calculate :current_duration,
               :integer,
-              expr(sum(entries, field: :duration, query: [filter: expr(fragment("?::date = ?", from, today()))]))
+              expr(
+                sum(entries,
+                  field: :duration,
+                  query: [filter: expr(fragment("?::date = ?", from, today()))]
+                )
+              )
   end
 
   actions do

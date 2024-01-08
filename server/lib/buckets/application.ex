@@ -17,7 +17,8 @@ defmodule Buckets.Application do
       # Start a worker by calling: Buckets.Worker.start_link(arg)
       # {Buckets.Worker, arg},
       # Start to serve requests, typically the last entry
-      BucketsWeb.Endpoint
+      BucketsWeb.Endpoint,
+      {Absinthe.Subscription, BucketsWeb.Endpoint}
     ]
 
     Corsica.Telemetry.attach_default_handler(log_levels: [rejected: :error])

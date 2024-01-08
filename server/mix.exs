@@ -38,6 +38,7 @@ defmodule Buckets.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_dashboard, "~> 0.8.2"},
+      {:phoenix_pubsub, "~> 2.0"},
       {:swoosh, "~> 1.3"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 0.6"},
@@ -47,10 +48,11 @@ defmodule Buckets.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       {:absinthe, "~> 1.7"},
-      {:absinthe_plug, "~> 1.5"},
+      {:absinthe_phoenix, "~> 2.0"},
       {:ash, github: "ash-project/ash", branch: "main", override: true},
       {:ash_postgres, github: "ash-project/ash_postgres", branch: "main"},
-      {:ash_graphql, github: "ash-project/ash_graphql", branch: "main"}
+      {:ash_graphql, path: "../../../ash_graphql"},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 

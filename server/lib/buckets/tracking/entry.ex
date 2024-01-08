@@ -22,7 +22,9 @@ defmodule Buckets.Tracking.Entry do
   end
 
   calculations do
-    calculate :duration, :integer, expr(fragment("EXTRACT(EPOCH FROM COALESCE(?, NOW()) - ?) / 60", to, from))
+    calculate :duration,
+              :integer,
+              expr(fragment("EXTRACT(EPOCH FROM COALESCE(?, NOW()) - ?) / 60", to, from))
   end
 
   relationships do
