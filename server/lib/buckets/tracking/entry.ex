@@ -1,5 +1,8 @@
 defmodule Buckets.Tracking.Entry do
-  use Ash.Resource, data_layer: AshPostgres.DataLayer, extensions: [AshGraphql.Resource]
+  use Ash.Resource,
+    domain: Buckets.Tracking,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshGraphql.Resource]
 
   postgres do
     table "bucket_entry"

@@ -1,6 +1,8 @@
 defmodule Buckets.Tracking.Schedule.Daily do
   use Ash.Resource, data_layer: :embedded, extensions: [AshGraphql.Resource]
 
+  alias Buckets.Tracking.Schedule.Weekdays
+
   attributes do
     attribute :type, :atom do
       allow_nil? false
@@ -8,21 +10,12 @@ defmodule Buckets.Tracking.Schedule.Daily do
       writable? false
     end
 
-    attribute :weekdays, {:array, :atom} do
-      constraints items: [
-                    one_of: [
-                      :monday,
-                      :tuesday,
-                      :wednesday,
-                      :thursday,
-                      :friday,
-                      :saturday,
-                      :sunday
-                    ]
-                  ]
+    attribute :weekdays, {:array, Weekdays} do
+      public? true
     end
 
     attribute :minutes, :integer do
+      public? true
       allow_nil? false
       default 0
     end

@@ -2,26 +2,29 @@ defmodule BucketsWeb.Router do
   use BucketsWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   pipeline :graphql do
-    plug AshGraphql.Plug
+    plug(AshGraphql.Plug)
   end
 
   scope "/" do
-    pipe_through [:graphql]
+    pipe_through([:graphql])
 
-    forward "/gql", Absinthe.Plug, schema: BucketsWeb.Schema
+    forward("/gql", Absinthe.Plug, schema: BucketsWeb.Schema)
 
-    forward "/playground",
-            Absinthe.Plug.GraphiQL,
-            schema: BucketsWeb.Schema,
-            interface: :playground
+    forward(
+      "/playground",
+      Absinthe.Plug.GraphiQL,
+      schema: BucketsWeb.Schema,
+      socket: BucketsWeb.UserSocket,
+      interface: :playground
+    )
   end
 
   scope "/api", BucketsWeb do
-    pipe_through :api
+    pipe_through(:api)
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -34,10 +37,10 @@ defmodule BucketsWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through [:fetch_session, :protect_from_forgery]
+      pipe_through([:fetch_session, :protect_from_forgery])
 
-      live_dashboard "/dashboard", metrics: BucketsWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: BucketsWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

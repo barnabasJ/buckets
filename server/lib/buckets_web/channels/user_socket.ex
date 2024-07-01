@@ -36,6 +36,7 @@ defmodule BucketsWeb.UserSocket do
   # performing token verification on connect.
   @impl true
   def connect(_params, socket, _connect_info) do
+    socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{actor: %{id: "my-actor"}})
     {:ok, socket}
   end
 

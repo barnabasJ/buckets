@@ -28,7 +28,8 @@ defmodule Buckets.Tracking.Schedule do
 
   def struct_to_name(%struct{}), do: @structs_to_names[struct]
 
-  def graphql_type, do: :bucket_schedule
+  def graphql_type(_), do: :bucket_schedule
+  def graphql_input_type(_), do: :bucket_schedule_input
 
   # Tells AshGrapqhl to use the graphql types from the embedded
   # resources inside the union instead of creating new ones

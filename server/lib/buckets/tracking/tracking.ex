@@ -1,5 +1,5 @@
 defmodule Buckets.Tracking do
-  use Ash.Api
+  use Ash.Domain
 
   resources do
     resource Buckets.Tracking.Bucket

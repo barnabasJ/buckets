@@ -47,10 +47,11 @@ defmodule Buckets.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-      {:absinthe, "~> 1.7"},
+      {:absinthe, path: "../../../absinthe", override: true},
       {:absinthe_phoenix, "~> 2.0"},
-      {:ash, github: "ash-project/ash", branch: "main", override: true},
-      {:ash_postgres, github: "ash-project/ash_postgres", branch: "main"},
+      # {:ash, github: "ash-project/ash", branch: "main", override: true},
+      {:ash, path: "../../../ash", override: true},
+      {:ash_postgres, path: "../../../ash_postgres"},
       {:ash_graphql, path: "../../../ash_graphql"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
