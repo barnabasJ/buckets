@@ -1,5 +1,4 @@
 defmodule BucketsWeb.Endpoint do
-  alias Absinthe.Pipeline.BatchResolver
   use Phoenix.Endpoint, otp_app: :buckets
   use AshGraphql.Endpoint
 
