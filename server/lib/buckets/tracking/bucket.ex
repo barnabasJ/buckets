@@ -1,6 +1,7 @@
 defmodule Buckets.Tracking.Bucket do
   use Ash.Resource,
     domain: Buckets.Tracking,
+    authorizers: [Ash.Policy.Authorizer],
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
@@ -26,6 +27,16 @@ defmodule Buckets.Tracking.Bucket do
 
   relationships do
     has_many(:entries, Buckets.Tracking.Entry)
+  end
+
+  policies do
+    policy always() do
+      authorize_if always()
+    end
+
+    # policy action_type(:read) do
+    #   authorize_if expr(not is_nil(id))
+    # end
   end
 
   graphql do
