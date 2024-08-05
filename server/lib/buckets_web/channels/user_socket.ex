@@ -2,6 +2,8 @@ defmodule BucketsWeb.UserSocket do
   use Phoenix.Socket
   use Absinthe.Phoenix.Socket, schema: BucketsWeb.Schema
 
+  alias BucketsWeb.Plugs.Auth
+
   # A Socket handler
   #
   # It's possible to control the websocket connection and
@@ -35,8 +37,21 @@ defmodule BucketsWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
-    socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{actor: %{id: "my-actor"}})
+  def connect(params, socket, _connect_info) do
+    actor =
+      case Map.get(params, "Authorization") do
+        nil ->
+          nil
+
+        bearer_token ->
+          [%{user: user}] =
+            bearer_token
+            |> Auth.load_user_from_bearer_token(nil)
+
+          user
+      end
+
+    socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{actor: actor})
     {:ok, socket}
   end
 

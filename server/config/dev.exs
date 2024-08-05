@@ -67,3 +67,5 @@ config :swoosh, :api_client, false
 
 # Configure the token signing secret for AshAuthentication
 config :buckets, :token_signing_secret, "wzeK*9Ds!#tGyCRu%UxznJG"
+
+config :ash, :policies, show_policy_breakdowns?: true

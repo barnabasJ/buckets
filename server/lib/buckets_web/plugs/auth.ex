@@ -13,30 +13,51 @@ defmodule BucketsWeb.Plugs.Auth do
   def call(conn, _) do
     conn
     |> Conn.get_req_header("authorization")
+    |> load_user_from_bearer_token(Ash.PlugHelpers.get_tenant(conn))
+    |> Enum.reduce(conn, fn %{
+                              subject_name: subject_name,
+                              current_subject_name: current_subject_name,
+                              token_record: token_record,
+                              user: user
+                            },
+                            conn ->
+      conn
+      |> Conn.assign(current_subject_name, user)
+      |> maybe_assign_token_record(token_record, subject_name)
+      |> Ash.PlugHelpers.set_actor(user)
+    end)
+  end
+
+  def load_user_from_bearer_token(headers, tenant) when is_list(headers) do
+    headers
     |> Stream.filter(&String.starts_with?(&1, "Bearer "))
     |> Stream.map(&String.replace_leading(&1, "Bearer ", ""))
-    |> Enum.reduce(conn, fn token, conn ->
+    |> Enum.reduce([], fn token, acc ->
       with {:ok, %{"sub" => subject, "jti" => jti} = claims, resource}
            when not is_map_key(claims, "act") <- Jwt.verify(token, @otp_app),
            {:ok, token_record} <-
              validate_token(resource, jti),
            {:ok, user} <-
-             AshAuthentication.subject_to_user(subject, resource,
-               tenant: Ash.PlugHelpers.get_tenant(conn)
-             ),
+             AshAuthentication.subject_to_user(subject, resource, tenant: tenant),
            {:ok, subject_name} <- Info.authentication_subject_name(resource),
            current_subject_name <- current_subject_name(subject_name) do
-        dbg()
-
-        conn
-        |> Conn.assign(current_subject_name, user)
-        |> maybe_assign_token_record(token_record, subject_name)
-        |> Ash.PlugHelpers.set_actor(user)
+        [
+          %{
+            subject_name: subject_name,
+            current_subject_name: current_subject_name,
+            token_record: token_record,
+            user: user
+          }
+          | acc
+        ]
       else
-        _ -> conn
+        _ -> acc
       end
     end)
   end
+
+  def load_user_from_bearer_token(headers, tenant),
+    do: load_user_from_bearer_token([headers], tenant)
 
   defp validate_token(resource, jti) do
     if Info.authentication_tokens_require_token_presence_for_authentication?(resource) do
