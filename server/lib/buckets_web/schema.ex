@@ -1,7 +1,7 @@
 defmodule BucketsWeb.Schema do
   use Absinthe.Schema
 
-  @domains [Buckets.Tracking]
+  @domains [Buckets.Tracking, Buckets.Accounts]
 
   use AshGraphql, domains: @domains
 
@@ -12,11 +12,5 @@ defmodule BucketsWeb.Schema do
   end
 
   subscription do
-    #   field :new_bucket, :bucket do
-    #     config(fn _, _ ->
-    #       IO.inspect("new_bucket")
-    #       {:ok, topic: "*"}
-    #     end)
-    #   end
   end
 end

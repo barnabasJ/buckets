@@ -57,5 +57,8 @@ defmodule BucketsWeb.Endpoint do
     allow_headers: ["content-type"]
 
   plug Plug.Session, @session_options
+
+  plug BucketsWeb.Plugs.Auth
+
   plug BucketsWeb.Router
 end

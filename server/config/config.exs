@@ -40,7 +40,7 @@ config :logger, :console,
 config :phoenix, :json_library, Jason
 
 # Ash
-config :buckets, ash_domains: [Buckets.Tracking]
+config :buckets, ash_domains: [Buckets.Tracking, Buckets.Accounts]
 
 # Error Message
 # When the 1.0 version of ash_graphql is released, the default will be changed to `:datetime`, and this error message will

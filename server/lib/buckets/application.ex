@@ -10,6 +10,7 @@ defmodule Buckets.Application do
     children = [
       BucketsWeb.Telemetry,
       Buckets.Repo,
+      {AshAuthentication.Supervisor, otp_app: :buckets},
       {DNSCluster, query: Application.get_env(:buckets, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Buckets.PubSub},
       # Start the Finch HTTP client for sending emails

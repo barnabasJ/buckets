@@ -49,10 +49,12 @@ defmodule Buckets.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:absinthe, path: "../../../absinthe", override: true},
       {:absinthe_phoenix, "~> 2.0"},
+      {:picosat_elixir, "~> 0.2"},
       # {:ash, github: "ash-project/ash", branch: "main", override: true},
       {:ash, path: "../../../ash", override: true},
-      {:ash_postgres, path: "../../../ash_postgres"},
+      {:ash_postgres, path: "../../../ash_postgres", override: true},
       {:ash_graphql, path: "../../../ash_graphql"},
+      {:ash_authentication, "~> 4.0"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end

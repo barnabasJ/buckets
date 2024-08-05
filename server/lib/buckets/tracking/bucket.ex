@@ -26,7 +26,11 @@ defmodule Buckets.Tracking.Bucket do
   end
 
   relationships do
-    has_many(:entries, Buckets.Tracking.Entry)
+    has_many :entries, Buckets.Tracking.Entry
+
+    belongs_to :user, Buckets.Accounts.User do
+      allow_nil? false
+    end
   end
 
   policies do
@@ -34,9 +38,9 @@ defmodule Buckets.Tracking.Bucket do
       authorize_if always()
     end
 
-    # policy action_type(:read) do
-    #   authorize_if expr(not is_nil(id))
-    # end
+    policy action_type(:read) do
+      authorize_if expr(user_id == ^actor(:id))
+    end
   end
 
   graphql do
@@ -71,6 +75,17 @@ defmodule Buckets.Tracking.Bucket do
 
   actions do
     default_accept :*
-    defaults([:create, :read, :update, :destroy])
+    defaults([:read, :update, :destroy])
+
+    create :create do
+      primary? true
+
+      change fn changeset, %{actor: actor} = context ->
+        dbg()
+
+        changeset
+        |> Ash.Changeset.change_attribute(:user_id, Map.get(actor || %{}, :id))
+      end
+    end
   end
 end

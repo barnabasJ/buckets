@@ -4,6 +4,6 @@ defmodule Buckets.Repo do
     adapter: Ecto.Adapters.Postgres
 
   def installed_extensions do
-    ["ash-functions"]
+    ["ash-functions", "uuid-ossp", "citext"]
   end
 end
