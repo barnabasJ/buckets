@@ -44,11 +44,12 @@ defmodule BucketsWeb.UserSocket do
           nil
 
         bearer_token ->
-          [%{user: user}] =
-            bearer_token
-            |> Auth.load_user_from_bearer_token(nil)
-
-          user
+          with [%{user: user}] <- Auth.load_user_from_bearer_token(bearer_token, nil) do
+            user
+          else
+            _ ->
+              nil
+          end
       end
 
     socket = Absinthe.Phoenix.Socket.put_options(socket, context: %{actor: actor})

@@ -38,8 +38,12 @@ defmodule Buckets.Tracking.Bucket do
       authorize_if always()
     end
 
-    policy action_type(:read) do
+    policy action(:read) do
       authorize_if expr(user_id == ^actor(:id))
+    end
+
+    policy action(:read_common) do
+      authorize_if expr(not is_nil(user_id))
     end
   end
 
@@ -56,7 +60,20 @@ defmodule Buckets.Tracking.Bucket do
 
     subscriptions do
       pubsub(BucketsWeb.Endpoint)
-      subscribe(:bucket_created)
+
+      subscribe(:bucket_created) do
+        actions(:create)
+        read_action :read
+      end
+
+      subscribe(:bucket_common_filter) do
+        read_action :read_common
+      end
+
+      subscribe(:bucket_updated) do
+        actions(:update)
+        read_action :read
+      end
     end
   end
 
@@ -76,6 +93,8 @@ defmodule Buckets.Tracking.Bucket do
   actions do
     default_accept :*
     defaults([:read, :update, :destroy])
+
+    read :read_common
 
     create :create do
       primary? true
