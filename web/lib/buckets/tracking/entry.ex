@@ -4,9 +4,56 @@ defmodule Buckets.Tracking.Entry do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  require Ash.Query
+
+  graphql do
+    type :bucket_entry
+  end
+
   postgres do
     table "bucket_entry"
     repo Buckets.Repo
+  end
+
+  actions do
+    defaults [:create, :read, :update, :destroy]
+
+    create :start do
+      accept [:bucket_id, :description]
+
+      change before_action(fn changeset, context ->
+               bucket_id = Ash.Changeset.get_attribute(changeset, :bucket_id)
+
+               case __MODULE__
+                    |> Ash.Query.filter(is_nil(to) and bucket_id == ^bucket_id)
+                    |> Ash.Query.for_read(:read, %{}, Ash.Context.to_opts(context))
+                    |> Ash.read_one() do
+                 {:ok, nil} ->
+                   changeset
+
+                 {:ok, entry} ->
+                   entry
+                   |> Ash.Changeset.for_update(:stop, %{}, Ash.Context.to_opts(context))
+                   |> Ash.update!()
+
+                   changeset
+
+                 {:error, error} ->
+                   Ash.Changeset.add_error(changeset, error)
+               end
+             end)
+
+      change before_action(fn changeset, _context ->
+               changeset
+               |> Ash.Changeset.change_attribute(:from, DateTime.utc_now())
+             end)
+    end
+
+    update :stop do
+      accept [:description]
+
+      change atomic_update(:to, expr(now()))
+    end
   end
 
   attributes do
@@ -16,6 +63,8 @@ defmodule Buckets.Tracking.Entry do
       allow_nil? false
     end
 
+    attribute :description, :string
+
     attribute :from, :utc_datetime do
       allow_nil? false
     end
@@ -24,21 +73,13 @@ defmodule Buckets.Tracking.Entry do
     end
   end
 
-  calculations do
-    calculate :duration,
-              :integer,
-              expr(fragment("EXTRACT(EPOCH FROM COALESCE(?, NOW()) - ?) / 60", to, from))
-  end
-
   relationships do
     belongs_to :bucket, Buckets.Tracking.Bucket
   end
 
-  actions do
-    defaults [:create, :read, :update, :destroy]
-  end
-
-  graphql do
-    type :bucket_entry
+  calculations do
+    calculate :duration,
+              :integer,
+              expr(fragment("EXTRACT(EPOCH FROM COALESCE(?, NOW()) - ?) / 60", to, from))
   end
 end

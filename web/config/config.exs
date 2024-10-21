@@ -60,6 +60,8 @@ config :buckets, BucketsWeb.Endpoint,
   pubsub_server: Buckets.PubSub,
   live_view: [signing_salt: "4/vomH3v"]
 
+config :ex_cldr, default_backend: BucketsWeb.Cldr
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

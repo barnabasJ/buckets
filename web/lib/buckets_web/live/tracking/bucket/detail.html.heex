@@ -1,0 +1,55 @@
+<div class="w-full">
+  <h1>Bucket</h1>
+  <div class="w-full flex space-x-5">
+    <Components.bucket bucket={@bucket} />
+    <div class="flex-1">
+      <%= if @current_entry do %>
+        <.form
+          for={@entry_stop_form}
+          phx-submit="stop_entry"
+          id={"#{@bucket.id}-entry-stop-form"}
+          class="flex space-x-2 items-center"
+        >
+          <.input
+            id={"#{@bucket.id}-entry-stop-form-description"}
+            hide_label
+            label="Description"
+            placeholder="Description"
+            field={@entry_stop_form[:description]}
+            type="text"
+            class="w-1/3"
+          />
+          <.button class="ml-2">
+            <.icon name="hero-stop" class="h-5 w-5" />
+          </.button>
+        </.form>
+      <% else %>
+        <.form
+          for={@entry_start_form}
+          phx-submit="start_entry"
+          id={"#{@bucket.id}-entry-start-form"}
+          class="flex items-center"
+        >
+          <.input
+            id={"#{@bucket.id}-entry-start-form-bucket-id"}
+            field={@entry_start_form[:bucket_id]}
+            value={@bucket.id}
+            type="hidden"
+          />
+          <.input
+            id={"#{@bucket.id}-entry-start-form-description"}
+            hide_label
+            label="Description"
+            field={@entry_start_form[:description]}
+            placeholder="Description"
+            type="text"
+            class="w-1/3"
+          />
+          <.button class="ml-2">
+            <.icon name="hero-play" class="h-5 w-5" />
+          </.button>
+        </.form>
+      <% end %>
+    </div>
+  </div>
+</div>

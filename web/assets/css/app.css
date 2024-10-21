@@ -3,3 +3,24 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+
+/* This way you could show different content
+ * based on the loading state of the form.
+
+.entry-start-form-button .entry-start-form-button-enabled {
+    display: block;
+}
+
+.entry-start-form-button.phx-submit-loading .entry-start-form-button-enabled {
+    display: none;
+}
+
+.entry-start-form-button .entry-start-form-button-disabled {
+    display: none;
+}
+
+.entry-start-form-button.phx-submit-loading .entry-start-form-button-disabled {
+    display: block;
+}
+*/

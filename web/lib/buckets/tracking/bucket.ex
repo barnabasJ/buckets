@@ -5,31 +5,57 @@ defmodule Buckets.Tracking.Bucket do
     data_layer: AshPostgres.DataLayer,
     extensions: [AshGraphql.Resource]
 
+  graphql do
+    type :bucket
+
+    queries do
+      list :buckets, :read
+    end
+
+    mutations do
+      create :new_bucket, :create
+    end
+
+    subscriptions do
+      pubsub BucketsWeb.Endpoint
+
+      subscribe :bucket_created do
+        actions :create
+        read_action :read
+      end
+
+      subscribe :bucket_common_filter do
+        action_types [:create, :read, :update]
+        actor fn _ -> nil end
+        read_action :read_common
+      end
+
+      subscribe :bucket_updated do
+        actions :update
+        read_action :read
+      end
+    end
+  end
+
   postgres do
-    table("bucket")
+    table "bucket"
 
-    repo(Buckets.Repo)
+    repo Buckets.Repo
   end
 
-  attributes do
-    uuid_primary_key(:id)
+  actions do
+    default_accept :*
+    defaults [:read, :update, :destroy]
 
-    attribute :name, :string do
-      public?(true)
-      allow_nil?(false)
-    end
+    read :read_common
 
-    attribute :schedule, Buckets.Tracking.Schedule do
-      public? true
-      allow_nil?(false)
-    end
-  end
+    create :create do
+      primary? true
 
-  relationships do
-    has_many :entries, Buckets.Tracking.Entry
-
-    belongs_to :user, Buckets.Accounts.User do
-      allow_nil? false
+      change fn changeset, %{actor: actor} = context ->
+        changeset
+        |> Ash.Changeset.change_attribute(:user_id, Map.get(actor || %{}, :id))
+      end
     end
   end
 
@@ -47,66 +73,49 @@ defmodule Buckets.Tracking.Bucket do
     end
   end
 
-  graphql do
-    type(:bucket)
+  attributes do
+    uuid_primary_key :id
 
-    queries do
-      list(:buckets, :read)
+    attribute :name, :string do
+      public? true
+      allow_nil? false
     end
 
-    mutations do
-      create(:new_bucket, :create)
+    attribute :schedule, Buckets.Tracking.Schedule do
+      public? true
+      allow_nil? false
+    end
+  end
+
+  relationships do
+    has_many :entries, Buckets.Tracking.Entry
+
+    has_many :finished_entries, Buckets.Tracking.Entry do
+      filter expr(not is_nil(to))
     end
 
-    subscriptions do
-      pubsub(BucketsWeb.Endpoint)
+    has_one :current_entry, Buckets.Tracking.Entry do
+      from_many? true
+      filter expr(is_nil(to))
+    end
 
-      subscribe(:bucket_created) do
-        actions(:create)
-        read_action :read
-      end
-
-      subscribe(:bucket_common_filter) do
-        action_types([:create, :read, :update])
-        actor(fn _ -> nil end)
-        read_action :read_common
-      end
-
-      subscribe(:bucket_updated) do
-        actions(:update)
-        read_action :read
-      end
+    belongs_to :user, Buckets.Accounts.User do
+      allow_nil? false
     end
   end
 
   calculations do
-    calculate(
-      :current_duration,
-      :integer,
-      expr(
-        sum(entries,
-          field: :duration,
-          query: [filter: expr(fragment("?::date = ?", from, today()))]
-        )
-      )
-    )
-  end
+    calculate :current_duration,
+              :integer,
+              expr(
+                sum(entries,
+                  field: :duration,
+                  query: [filter: expr(fragment("?::date = ?", from, today()))]
+                ) || 0
+              )
 
-  actions do
-    default_accept :*
-    defaults([:read, :update, :destroy])
-
-    read :read_common
-
-    create :create do
-      primary? true
-
-      change fn changeset, %{actor: actor} = context ->
-        dbg()
-
-        changeset
-        |> Ash.Changeset.change_attribute(:user_id, Map.get(actor || %{}, :id))
-      end
-    end
+    calculate :duration,
+              :integer,
+              expr(sum(entries, field: :duration) || 0)
   end
 end

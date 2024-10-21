@@ -54,6 +54,8 @@ defmodule BucketsWeb do
       use Phoenix.LiveView,
         layout: {BucketsWeb.Layouts, :app}
 
+      alias BucketsWeb.Cldr
+
       unquote(html_helpers())
     end
   end

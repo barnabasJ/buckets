@@ -37,6 +37,12 @@ defmodule BucketsWeb.Router do
       # If an authenticated user must *not* be present:
       # on_mount {BucketsWeb.LiveUserAuth, :live_no_user}
     end
+
+    ash_authentication_live_session :tracking,
+      on_mount: {BucketsWeb.LiveUserAuth, :live_user_required} do
+      live "/tracking", Tracking.Bucket.Overview
+      live "/tracking/:id", Tracking.Bucket.Detail
+    end
   end
 
   scope "/gql" do
