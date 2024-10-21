@@ -19,7 +19,8 @@ defmodule Buckets.Application do
       # {Buckets.Worker, arg},
       # Start to serve requests, typically the last entry
       BucketsWeb.Endpoint,
-      {Absinthe.Subscription, BucketsWeb.Endpoint}
+      {Absinthe.Subscription, BucketsWeb.Endpoint},
+      AshGraphql.Subscription.Batcher
     ]
 
     Corsica.Telemetry.attach_default_handler(log_levels: [rejected: :error])

@@ -67,6 +67,8 @@ defmodule Buckets.Tracking.Bucket do
       end
 
       subscribe(:bucket_common_filter) do
+        action_types([:create, :read, :update])
+        actor(fn _ -> nil end)
         read_action :read_common
       end
 

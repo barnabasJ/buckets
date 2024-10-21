@@ -54,6 +54,7 @@ config :ash, :utc_datetime_type, :datetime
 config :ash_graphql, :default_managed_relationship_type_name_template, :action_name
 # https://hexdocs.pm/ash_graphql/use-json-with-graphql.html
 config :ash_graphql, :json_type, :json
+config :ash_graphql, :subscriptions, true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
