@@ -39,7 +39,7 @@ defmodule BucketsWeb.Router do
     end
   end
 
-  scope "/api" do
+  scope "/gql" do
     pipe_through [:graphql]
 
     forward "/playground",
