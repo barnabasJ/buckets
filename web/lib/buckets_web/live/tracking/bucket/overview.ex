@@ -11,7 +11,7 @@ defmodule BucketsWeb.Tracking.Bucket.Overview do
        :buckets,
        Tracking.read_buckets!(
          actor: socket.assigns.current_user,
-         load: [:duration, :current_duration, entries: [:duration]]
+         load: [:duration, :current_duration, finished_entries: [:duration]]
        )
      )}
   end

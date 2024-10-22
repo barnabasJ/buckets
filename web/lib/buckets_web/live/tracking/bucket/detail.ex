@@ -11,7 +11,8 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
      |> assign_bucket(params["id"])
      |> assign_current_entry()
      |> assign_entry_start_form()
-     |> assign_entry_stop_form()}
+     |> assign_entry_stop_form()
+     |> assign_entry_description_form()}
   end
 
   @loads [:duration, :current_duration, :current_entry, finished_entries: [:duration]]
@@ -20,11 +21,9 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
     socket
     |> assign(
       :bucket,
-      dbg(
-        Tracking.get_bucket_by_id!(id,
-          actor: socket.assigns.current_user,
-          load: @loads
-        )
+      Tracking.get_bucket_by_id!(id,
+        actor: socket.assigns.current_user,
+        load: @loads
       )
     )
   end
@@ -44,7 +43,7 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
     socket
     |> assign(
       :current_entry,
-      dbg(entry || socket.assigns.bucket.current_entry)
+      entry || socket.assigns.bucket.current_entry
     )
   end
 
@@ -67,7 +66,21 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
           actor: socket.assigns.current_user
         )
         |> to_form()
-        |> dbg()
+      else
+        nil
+      end
+    )
+  end
+
+  defp assign_entry_description_form(socket) do
+    socket
+    |> assign(
+      :entry_description_form,
+      if socket.assigns.current_entry do
+        AshPhoenix.Form.for_update(socket.assigns.current_entry, :update,
+          actor: socket.assigns.current_user
+        )
+        |> to_form()
       else
         nil
       end
@@ -76,12 +89,8 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
 
   @impl true
   def handle_event("start_entry", %{"form" => form_params}, socket) do
-    dbg(form_params)
-
     case AshPhoenix.Form.submit(socket.assigns.entry_start_form, params: form_params) do
       {:ok, entry} ->
-        dbg(entry)
-
         {:noreply,
          socket
          |> put_flash(:info, "Entry started")
@@ -90,8 +99,10 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
          |> assign_entry_stop_form()}
 
       {:error, form} ->
-        dbg(form)
-        {:noreply, assign(socket, entry_start_form: form)}
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to start entry")
+         |> assign(entry_start_form: form)}
     end
   end
 
@@ -104,10 +115,50 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
          |> put_flash(:info, "Entry stopped")
          |> assign_bucket(socket.assigns.bucket)
          |> assign_current_entry()
+         |> assign_entry_stop_form()
+         |> assign_entry_description_form()}
+
+      {:error, form} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to stop entry")
+         |> assign(entry_stop_form: form)}
+    end
+  end
+
+  @impl true
+  def handle_event("update_entry", %{"form" => form_params}, socket) do
+    case dbg(AshPhoenix.Form.submit(socket.assigns.entry_description_form, params: form_params)) do
+      {:ok, entry} ->
+        {:noreply,
+         socket
+         |> assign_current_entry(entry)
+         |> assign_entry_description_form()}
+
+      {:error, form} ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to update entry description")
+         |> assign(entry_description_form: form)}
+    end
+  end
+
+  @impl true
+  def handle_event("stop_entry", %{}, socket) do
+    case AshPhoenix.Form.submit(socket.assigns.entry_stop_form) do
+      {:ok, _entry} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Entry stopped")
+         |> assign_bucket(socket.assigns.bucket)
+         |> assign_current_entry()
          |> assign_entry_stop_form()}
 
       {:error, form} ->
-        {:noreply, assign(socket, entry_stop_form: form)}
+        {:noreply,
+         socket
+         |> put_flash(:error, "Failed to stop entry")
+         |> assign(entry_stop_form: form)}
     end
   end
 end

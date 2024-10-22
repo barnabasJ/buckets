@@ -88,10 +88,13 @@ defmodule Buckets.Tracking.Bucket do
   end
 
   relationships do
-    has_many :entries, Buckets.Tracking.Entry
+    has_many :entries, Buckets.Tracking.Entry do
+      sort from: :desc
+    end
 
     has_many :finished_entries, Buckets.Tracking.Entry do
       filter expr(not is_nil(to))
+      sort from: :desc
     end
 
     has_one :current_entry, Buckets.Tracking.Entry do

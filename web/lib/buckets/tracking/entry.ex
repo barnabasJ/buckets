@@ -16,7 +16,7 @@ defmodule Buckets.Tracking.Entry do
   end
 
   actions do
-    defaults [:create, :read, :update, :destroy]
+    defaults [:create, :read, :destroy]
 
     create :start do
       accept [:bucket_id, :description]
@@ -49,8 +49,16 @@ defmodule Buckets.Tracking.Entry do
              end)
     end
 
+    update :update do
+      primary? true
+
+      accept [:description]
+    end
+
     update :stop do
       accept [:description]
+
+      validate attributes_absent(:to)
 
       change atomic_update(:to, expr(now()))
     end
