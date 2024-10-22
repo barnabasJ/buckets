@@ -3,6 +3,10 @@ defmodule Buckets.Tracking.Schedule.Weekly do
 
   alias Buckets.Tracking.Schedule.Weekdays
 
+  graphql do
+    type :bucket_weekly_schedule
+  end
+
   attributes do
     attribute :type, :atom do
       allow_nil? false
@@ -19,9 +23,5 @@ defmodule Buckets.Tracking.Schedule.Weekly do
       allow_nil? false
       default 0
     end
-  end
-
-  graphql do
-    type :bucket_weekly_schedule
   end
 end

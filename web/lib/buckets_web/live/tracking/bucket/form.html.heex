@@ -1,6 +1,52 @@
 <div>
-  <.form id="new_bucket_form" phx-target={@myself}>
+  <.form id="new_bucket_form" for={@form} phx-target={@myself} phx-submit="save" class="space-y-2">
     <.input label="Name" field={@form[:name]} type="text" />
+
+    <div class="pl-2">
+      <.inputs_for :let={fc} field={@form[:schedule]}>
+        <!-- Dropdown for setting the union type -->
+        <.input
+          label="Schedule type"
+          field={fc[:_union_type]}
+          phx-change="type-changed"
+          type="select"
+          options={[daily: "daily", weekly: "weekly"]}
+        />
+        <!-- switch on the union type to display a form -->
+        <%= case fc.params["_union_type"] do %>
+          <% "daily" -> %>
+            <.input
+              label="Weekdays"
+              type="text"
+              multiple
+              field={fc[:weekdays]}
+              type="select"
+              options={
+                dbg(
+                  Weekdays.values()
+                  |> Enum.map(&{&1, to_string(&1)})
+                )
+              }
+            />
+            <.input label="Minutes" type="number" field={fc[:minutes]} />
+          <% "weekly" -> %>
+            <.input
+              label="Start day"
+              field={fc[:start_day]}
+              type="select"
+              options={
+                dbg(
+                  Weekdays.values()
+                  |> Enum.map(&{&1, to_string(&1)})
+                )
+              }
+            />
+            <.input label="Minutes" type="number" field={fc[:minutes]} />
+        <% end %>
+      </.inputs_for>
+    </div>
+    <.button phx-disable-with="Saving...">
+      Save
+    </.button>
   </.form>
-  <pre><%= inspect(@form, pretty: true) %></pre>
 </div>
