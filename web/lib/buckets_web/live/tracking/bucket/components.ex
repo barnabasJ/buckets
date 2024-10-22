@@ -120,7 +120,7 @@ defmodule BucketsWeb.Tracking.Bucket.Overview.Components do
         hide_label
         label="Description"
         placeholder="Description"
-        field={dbg(@form[:description])}
+        field={@form[:description]}
         phx-debounce="500"
         type="text"
         class="w-1/3"

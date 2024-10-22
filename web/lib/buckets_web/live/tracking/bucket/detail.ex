@@ -53,7 +53,6 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
       :entry_start_form,
       AshPhoenix.Form.for_create(Tracking.Entry, :start, actor: socket.assigns.current_user)
       |> to_form()
-      |> dbg()
     )
   end
 
@@ -128,7 +127,7 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
 
   @impl true
   def handle_event("update_entry", %{"form" => form_params}, socket) do
-    case dbg(AshPhoenix.Form.submit(socket.assigns.entry_description_form, params: form_params)) do
+    case AshPhoenix.Form.submit(socket.assigns.entry_description_form, params: form_params) do
       {:ok, entry} ->
         {:noreply,
          socket

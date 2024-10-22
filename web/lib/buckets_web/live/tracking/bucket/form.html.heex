@@ -1,0 +1,6 @@
+<div>
+  <.form id="new_bucket_form" phx-target={@myself}>
+    <.input label="Name" field={@form[:name]} type="text" />
+  </.form>
+  <pre><%= inspect(@form, pretty: true) %></pre>
+</div>

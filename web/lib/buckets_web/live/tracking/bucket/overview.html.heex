@@ -2,7 +2,10 @@
   <div class="mb-6">
     <h1 class="text-xl font-bold">Buckets</h1>
   </div>
-  <div class="space-y-4">
+  <div>
+    <.live_component module={Form} id="bucket-form" current_user={@current_user} />
+  </div>
+  <div class="mt-10 space-y-4">
     <%= for bucket <- @buckets do %>
       <Components.bucket bucket={bucket} />
     <% end %>
