@@ -30,7 +30,8 @@ defmodule BucketsWeb.Tracking.Bucket.Overview do
      socket
      |> stream_insert(
        :buckets,
-       bucket |> Ash.load!(@loads, actor: socket.assigns.current_user)
+       bucket |> Ash.load!(@loads, actor: socket.assigns.current_user),
+       at: 0
      )}
   end
 end
