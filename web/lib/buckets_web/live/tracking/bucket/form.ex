@@ -26,8 +26,19 @@ defmodule BucketsWeb.Tracking.Bucket.Form do
   end
 
   @impl true
+
+  def handle_event("validate", %{"form" => form_params}, socket) do
+    {:noreply,
+     socket
+     |> assign(
+       :form,
+       socket.assigns.form
+       |> AshPhoenix.Form.validate(form_params)
+     )}
+  end
+
+  @impl true
   def handle_event("type-changed", %{"_target" => path} = params, socket) do
-    dbg(params)
     new_type = get_in(params, path)
     # The last part of the path in this case is the field name
     path = :lists.droplast(path)
@@ -41,11 +52,11 @@ defmodule BucketsWeb.Tracking.Bucket.Form do
   end
 
   @impl true
-  def handle_event("save", %{"form" => form_params} = params, socket) do
-    dbg(params)
-
+  def handle_event("save", %{"form" => form_params}, socket) do
     case AshPhoenix.Form.submit(socket.assigns.form, params: form_params) do
-      {:ok, entry} ->
+      {:ok, bucket} ->
+        send(self(), {:bucket_created, bucket})
+
         {:noreply,
          socket
          |> put_flash(:info, "Bucket created")

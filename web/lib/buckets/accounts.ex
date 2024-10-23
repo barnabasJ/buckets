@@ -18,7 +18,14 @@ defmodule Buckets.Accounts do
 
   resources do
     resource Accounts.Token
-    resource Accounts.User
+
+    resource Accounts.User do
+      define :get_user_by_id, action: :read, get_by: :id
+
+      define :get_user_with_has_bucket,
+        action: :with_has_bucket,
+        get_by: :id,
+        args: [:bucket_id]
+    end
   end
 end
-

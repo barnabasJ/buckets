@@ -33,6 +33,7 @@ defmodule Buckets.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:phoenix_storybook, "~> 0.6"},
       {:bcrypt_elixir, "~> 3.0"},
       {:picosat_elixir, "~> 0.2"},
       {:ash_authentication, "~> 4.1"},
@@ -60,7 +61,8 @@ defmodule Buckets.MixProject do
        sparse: "optimized",
        app: false,
        compile: false,
-       depth: 1},
+       depth: 1,
+       override: true},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
@@ -94,6 +96,7 @@ defmodule Buckets.MixProject do
       "assets.deploy": [
         "tailwind buckets --minify",
         "esbuild buckets --minify",
+        "tailwind storybook --minify",
         "phx.digest"
       ],
       "ash.setup": ["ash.setup", "run priv/repo/seeds.exs"]

@@ -108,8 +108,6 @@ defmodule BucketsWeb.Tracking.Bucket.Detail do
 
   @impl true
   def handle_event("stop_entry", %{} = params, socket) do
-    dbg(params)
-
     case AshPhoenix.Form.submit(socket.assigns.entry_stop_form) do
       {:ok, _entry} ->
         {:noreply,

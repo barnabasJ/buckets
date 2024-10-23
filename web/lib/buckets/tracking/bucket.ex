@@ -85,6 +85,8 @@ defmodule Buckets.Tracking.Bucket do
       public? true
       allow_nil? false
     end
+
+    timestamps()
   end
 
   relationships do

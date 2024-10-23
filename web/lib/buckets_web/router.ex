@@ -100,5 +100,16 @@ defmodule BucketsWeb.Router do
       live_dashboard "/dashboard", metrics: BucketsWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+
+    import PhoenixStorybook.Router
+
+    scope "/" do
+      storybook_assets()
+    end
+
+    scope "/", Elixir.BucketsWeb do
+      pipe_through(:browser)
+      live_storybook("/storybook", backend_module: Elixir.BucketsWeb.Storybook)
+    end
   end
 end

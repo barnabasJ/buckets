@@ -1,5 +1,12 @@
 <div>
-  <.form id="new_bucket_form" for={@form} phx-target={@myself} phx-submit="save" class="space-y-2">
+  <.form
+    id="new_bucket_form"
+    for={@form}
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="space-y-2"
+  >
     <.input label="Name" field={@form[:name]} type="text" />
 
     <div class="pl-2">
@@ -17,15 +24,12 @@
           <% "daily" -> %>
             <.input
               label="Weekdays"
-              type="text"
               multiple
               field={fc[:weekdays]}
               type="select"
               options={
-                dbg(
-                  Weekdays.values()
-                  |> Enum.map(&{&1, to_string(&1)})
-                )
+                Weekdays.values()
+                |> Enum.map(&{&1, to_string(&1)})
               }
             />
             <.input label="Minutes" type="number" field={fc[:minutes]} />
@@ -35,10 +39,8 @@
               field={fc[:start_day]}
               type="select"
               options={
-                dbg(
-                  Weekdays.values()
-                  |> Enum.map(&{&1, to_string(&1)})
-                )
+                Weekdays.values()
+                |> Enum.map(&{&1, to_string(&1)})
               }
             />
             <.input label="Minutes" type="number" field={fc[:minutes]} />

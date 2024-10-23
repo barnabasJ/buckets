@@ -26,7 +26,8 @@ config :buckets, BucketsWeb.Endpoint,
   secret_key_base: "2rs31A8Hg7pMrsiNgygRZqFETCdhDk0EnOl81LOljebLJ3hRv1++/6cIjEGZ/OZU",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:buckets, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:buckets, ~w(--watch)]}
+    tailwind: {Tailwind, :install_and_run, [:buckets, ~w(--watch)]},
+    storybook_tailwind: {Tailwind, :install_and_run, [:storybook, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -58,7 +59,8 @@ config :buckets, BucketsWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/buckets_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/buckets_web/(controllers|live|components)/.*(ex|heex)$",
+      ~r"storybook/.*(exs)$"
     ]
   ]
 

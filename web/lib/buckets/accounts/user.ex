@@ -6,6 +6,8 @@ defmodule Buckets.Accounts.User do
     extensions: [AshAuthentication, AshGraphql.Resource],
     data_layer: AshPostgres.DataLayer
 
+  alias Buckets.Tracking.Bucket
+
   authentication do
     tokens do
       enabled? true
@@ -44,6 +46,14 @@ defmodule Buckets.Accounts.User do
 
   actions do
     defaults [:read]
+
+    read :with_has_bucket do
+      argument :bucket_id, :uuid do
+        allow_nil? false
+      end
+
+      prepare build(load: [has_bucket: %{bucket_id: arg(:bucket_id)}])
+    end
 
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
@@ -220,6 +230,18 @@ defmodule Buckets.Accounts.User do
     attribute :hashed_password, :string do
       allow_nil? false
       sensitive? true
+    end
+  end
+
+  relationships do
+    has_many :buckets, Bucket
+  end
+
+  calculations do
+    calculate :has_bucket, :boolean, expr(exists(buckets, id == ^arg(:bucket_id))) do
+      argument :bucket_id, :uuid do
+        allow_nil? false
+      end
     end
   end
 

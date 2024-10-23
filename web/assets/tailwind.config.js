@@ -6,7 +6,9 @@ const fs = require("fs")
 const path = require("path")
 
 module.exports = {
+    important: ".buckets-web",
     content: [
+
         "./js/**/*.js",
         "../lib/buckets_web.ex",
         "../lib/buckets_web/**/*.*ex",

@@ -79,6 +79,8 @@ defmodule Buckets.Tracking.Entry do
 
     attribute :to, :utc_datetime do
     end
+
+    timestamps()
   end
 
   relationships do
