@@ -22,6 +22,13 @@
         <!-- switch on the union type to display a form -->
         <%= case fc.params["_union_type"] do %>
           <% "daily" -> %>
+            <.live_component
+              id="multi"
+              module={MultiSelect}
+              options={@options}
+              form={fc}
+              selected={fn opts -> send_update(@myself, updated_options: opts) end}
+            />
             <.input
               label="Weekdays"
               multiple

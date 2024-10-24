@@ -3,6 +3,7 @@ defmodule BucketsWeb.Tracking.Bucket.Form do
 
   alias Buckets.Tracking.Bucket
   alias Buckets.Tracking.Schedule.Weekdays
+  alias BucketsWeb.Form.MultiSelect
 
   @impl true
   def update(assigns, socket) do
@@ -13,16 +14,73 @@ defmodule BucketsWeb.Tracking.Bucket.Form do
   end
 
   defp assign_form(socket) do
-    socket
-    |> assign(
-      :form,
-      AshPhoenix.Form.for_create(Bucket, :create,
-        actor: socket.assigns.current_user,
-        forms: [auto?: true]
+    socket =
+      socket
+      |> assign_new(
+        :form,
+        fn ->
+          AshPhoenix.Form.for_create(Bucket, :create,
+            actor: socket.assigns.current_user,
+            forms: [auto?: true]
+          )
+          |> AshPhoenix.Form.add_form(:schedule, params: %{"_union_type" => "daily"})
+          |> to_form()
+        end
       )
-      |> AshPhoenix.Form.add_form(:schedule, params: %{"_union_type" => "daily"})
-      |> to_form()
-    )
+      |> assign(
+        :options,
+        Weekdays.values()
+        |> Enum.map(&{&1, to_string(&1)})
+        |> Enum.map(fn data ->
+          %{
+            id: elem(data, 1),
+            label: elem(data, 1),
+            selected: false
+          }
+        end)
+      )
+
+    if socket.assigns[:form][:schedule] do
+      if List.first(socket.assigns.form[:schedule].value).params["_union_type"] == "daily" and
+           socket.assigns[:updated_options] do
+        params =
+          socket.assigns.form
+          |> AshPhoenix.Form.params()
+          |> put_in(
+            [
+              "schedule",
+              "weekdays"
+            ],
+            socket.assigns[:updated_options]
+            |> Enum.filter(& &1.selected)
+            |> Enum.map(& &1.label)
+          )
+
+        socket
+        |> assign(
+          :form,
+          AshPhoenix.Form.add_form(socket.assigns.form, :schedule, params: params["schedule"])
+        )
+        |> assign(
+          :options,
+          dbg(
+            Weekdays.values()
+            |> Enum.map(&{&1, to_string(&1)})
+            |> Enum.map(fn data ->
+              %{
+                id: elem(data, 1),
+                label: elem(data, 1),
+                selected: elem(data, 1) in params["schedule"]["weekdays"]
+              }
+            end)
+          )
+        )
+      else
+        socket
+      end
+    else
+      socket
+    end
   end
 
   @impl true
