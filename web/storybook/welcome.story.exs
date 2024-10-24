@@ -52,7 +52,7 @@ defmodule Storybook.MyPage do
       )
 
     ~H"""
-    <p class="md:psb-text-lg psb-leading-relaxed psb-text-slate-400 psb-w-full psb-text-left psb-mb-4 psb-mt-2 psb-italic">
+    <p class="psb-leading-relaxed psb-text-slate-400 psb-w-full psb-text-left psb-mb-4 psb-mt-2 psb-italic md:psb-text-lg">
       <a
         class="hover:text-indigo-700"
         href={"https://hexdocs.pm/phoenix_storybook/#{@guide}.html"}
@@ -70,16 +70,16 @@ defmodule Storybook.MyPage do
   defp description_list(assigns) do
     ~H"""
     <div class="psb-w-full md:psb-px-8">
-      <div class="md:psb-border-t psb-border-gray-200 psb-px-4 psb-py-5 sm:psb-p-0 md:psb-my-6 psb-w-full">
+      <div class="psb-border-gray-200 psb-px-4 psb-py-5 psb-w-full sm:psb-p-0 md:psb-border-t md:psb-my-6">
         <dl class="sm:psb-divide-y sm:psb-divide-gray-200">
           <%= for {dt, link} <- @items do %>
-            <div class="psb-py-4 sm:psb-grid sm:psb-grid-cols-3 sm:psb-gap-4 sm:psb-py-5 sm:psb-px-6 psb-max-w-full">
+            <div class="psb-py-4 psb-max-w-full sm:psb-grid sm:psb-grid-cols-3 sm:psb-gap-4 sm:psb-py-5 sm:psb-px-6">
               <dt class="psb-text-base psb-font-medium psb-text-indigo-700">
                 <%= dt %>
               </dt>
-              <dd class="psb-mt-1 psb-text-base psb-text-slate-400 sm:psb-col-span-2 sm:psb-mt-0 psb-group psb-cursor-pointer psb-max-w-full">
+              <dd class="psb-mt-1 psb-text-base psb-text-slate-400 psb-group psb-cursor-pointer psb-max-w-full sm:psb-col-span-2 sm:psb-mt-0">
                 <a
-                  class="group-hover:psb-text-indigo-700 psb-max-w-full psb-inline-block psb-truncate"
+                  class="psb-max-w-full psb-inline-block psb-truncate group-hover:psb-text-indigo-700"
                   href={link}
                   target="_blank"
                 >

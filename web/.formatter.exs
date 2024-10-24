@@ -11,7 +11,12 @@
     :phoenix
   ],
   subdirectories: ["priv/*/migrations"],
-  plugins: [Absinthe.Formatter, Spark.Formatter, Phoenix.LiveView.HTMLFormatter],
+  plugins: [
+    Absinthe.Formatter,
+    Spark.Formatter,
+    TailwindFormatter,
+    Phoenix.LiveView.HTMLFormatter
+  ],
   inputs: [
     "*.{heex,ex,exs}",
     "{config,lib,test}/**/*.{heex,ex,exs}",

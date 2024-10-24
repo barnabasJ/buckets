@@ -43,8 +43,7 @@ defmodule BucketsWeb do
         layouts: [html: BucketsWeb.Layouts]
 
       import Plug.Conn
-      import BucketsWeb.Gettext
-
+      use Gettext, backend: BucketsWeb.Gettext
       unquote(verified_routes())
     end
   end
@@ -87,7 +86,7 @@ defmodule BucketsWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import BucketsWeb.CoreComponents
-      import BucketsWeb.Gettext
+      use Gettext, backend: BucketsWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

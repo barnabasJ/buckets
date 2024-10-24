@@ -9,7 +9,7 @@
   >
     <.input label="Name" field={@form[:name]} type="text" />
 
-    <div class="pl-2">
+    <div class="space-y-2 pl-2 ">
       <.inputs_for :let={fc} field={@form[:schedule]}>
         <!-- Dropdown for setting the union type -->
         <.input
@@ -22,6 +22,7 @@
         <!-- switch on the union type to display a form -->
         <%= case fc.params["_union_type"] do %>
           <% "daily" -> %>
+            <.label for="multi">Weekdays</.label>
             <.live_component
               id="multi"
               module={MultiSelect}

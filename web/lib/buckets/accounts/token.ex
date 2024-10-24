@@ -6,13 +6,13 @@ defmodule Buckets.Accounts.Token do
     extensions: [AshAuthentication.TokenResource, AshGraphql.Resource],
     data_layer: AshPostgres.DataLayer
 
+  graphql do
+    type :token
+  end
+
   postgres do
     table "tokens"
     repo Buckets.Repo
-  end
-
-  graphql do
-    type :token
   end
 
   actions do

@@ -19,7 +19,7 @@ defmodule BucketsWeb.Tracking.Bucket.Overview.Components do
     ~H"""
     <div>
       <.link href={~p"/tracking/#{@bucket.id}"}>
-        <h2 class="text-lg font-bold flex items-center">
+        <h2 class="flex items-center text-lg font-bold">
           Name: <%= @bucket.name %>
 
           <CoreComponents.icon name="hero-arrow-top-right-on-square" class="ml-2 h-5 w-5" />
@@ -85,7 +85,7 @@ defmodule BucketsWeb.Tracking.Bucket.Overview.Components do
 
   def current_entry(assigns) do
     ~H"""
-    <div class="flex space-x-2 items-center">
+    <div class="flex items-center space-x-2">
       <.entry_description_form bucket={@bucket} form={@description_form} />
       <.entry_stop_form bucket={@bucket} form={@stop_form} />
     </div>
