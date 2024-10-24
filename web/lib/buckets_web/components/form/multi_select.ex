@@ -1,4 +1,7 @@
 defmodule BucketsWeb.Form.MultiSelect do
+  @moduledoc """
+  inspired by https://fly.io/phoenix-files/liveview-multi-select/
+  """
   use BucketsWeb, :live_component
 
   def render(assigns) do
@@ -54,6 +57,12 @@ defmodule BucketsWeb.Form.MultiSelect do
       <div
         class="hidden w-96 mt-4 p-4 ml-2 mt-16 absolute z-10 bg-stone-50 shadow-2xl rounded-lg top-[100%]"
         id={"options-container-#{@id}"}
+        phx-click-away={
+          JS.toggle(to: "##{@id}-up-icon")
+          |> JS.toggle(to: "#options-container-#{@id}")
+          |> JS.toggle(to: "##{@id}-down-icon")
+          |> JS.toggle(to: "#options-container-#{@id}")
+        }
       >
         <div :for={value <- @options} class="form-check">
           <div class="form-check-label inline-block text-gray-800 flex">
