@@ -77,15 +77,14 @@ defmodule BucketsWeb.Form.MultiSelect do
   end
 
   def update(assigns, socket) do
-    %{options: options, form: form, selected: selected, id: id} = assigns
-    dbg(options)
+    %{options: options, field: field, selected: selected, id: id} = assigns
 
     socket =
       socket
       |> assign(:id, id)
       |> assign(:selected_options, dbg(filter_selected_options(options)))
       |> assign(:options, options)
-      |> assign(:form, form)
+      |> assign(:field, field)
       |> assign(:selected, selected)
 
     {:ok, socket}

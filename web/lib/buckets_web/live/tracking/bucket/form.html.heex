@@ -26,18 +26,8 @@
               id="multi"
               module={MultiSelect}
               options={@options}
-              form={fc}
-              selected={fn opts -> send_update(@myself, updated_options: opts) end}
-            />
-            <.input
-              label="Weekdays"
-              multiple
               field={fc[:weekdays]}
-              type="select"
-              options={
-                Weekdays.values()
-                |> Enum.map(&{&1, to_string(&1)})
-              }
+              selected={fn opts -> send_update(@myself, updated_options: opts) end}
             />
             <.input label="Minutes" type="number" field={fc[:minutes]} />
           <% "weekly" -> %>
