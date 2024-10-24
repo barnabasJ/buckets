@@ -33,10 +33,6 @@ defmodule BucketsWeb.Tracking.Bucket.Overview.Components do
       <%= if @current_duration != "" do %>
         <p>Time spent today: <%= Conversion.minutes_to_string(@bucket.current_duration) %></p>
       <% end %>
-
-      <div class="mt-2">
-        <.entries entries={@bucket.finished_entries} />
-      </div>
     </div>
     """
   end

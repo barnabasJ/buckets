@@ -1,8 +1,13 @@
 <div class="w-full">
   <h1>Bucket</h1>
   <div class="w-full flex space-x-5">
-    <Components.bucket bucket={@bucket} />
-    <div class="flex-1">
+    <section>
+      <Components.bucket bucket={@bucket} />
+      <div class="mt-2">
+        <Components.entries entries={@bucket.finished_entries} />
+      </div>
+    </section>
+    <section class="flex-1">
       <%= if @current_entry do %>
         <Components.current_entry
           bucket={@bucket}
@@ -12,6 +17,6 @@
       <% else %>
         <Components.new_entry bucket={@bucket} form={@entry_start_form} />
       <% end %>
-    </div>
+    </section>
   </div>
 </div>

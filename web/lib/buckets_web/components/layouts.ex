@@ -10,5 +10,7 @@ defmodule BucketsWeb.Layouts do
   """
   use BucketsWeb, :html
 
+  import BucketsWeb.Nav
+
   embed_templates "layouts/*"
 end

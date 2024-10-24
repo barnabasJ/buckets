@@ -39,7 +39,7 @@ defmodule BucketsWeb.Router do
     end
 
     ash_authentication_live_session :tracking,
-      on_mount: {BucketsWeb.LiveUserAuth, :live_user_required} do
+      on_mount: [{BucketsWeb.LiveUserAuth, :live_user_required}, BucketsWeb.Hooks.Nav] do
       live "/tracking", Tracking.Bucket.Overview
       live "/tracking/:id", Tracking.Bucket.Detail
     end
@@ -60,7 +60,7 @@ defmodule BucketsWeb.Router do
   end
 
   scope "/", BucketsWeb do
-    pipe_through :browser
+    pipe_through [:browser]
 
     get "/", PageController, :home
     auth_routes AuthController, Buckets.Accounts.User, path: "/auth"
